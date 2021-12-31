@@ -2,7 +2,14 @@
 
 ## SavedModel
 
-Get model input:
+**Save your (keras/tf) model:**
+```
+model.compile(...)
+model.fit(...)
+model.save("/path/to/your/model/folder/")
+```
+
+**Get model input:**
 ```
 $ saved_model_cli show --tag_set serve --signature_def serving_default --dir model/
 ```
@@ -26,6 +33,7 @@ The name of input and output tensors are `serving_default_dense_input:0` and `St
 
 ## Run model
 
+**Load model**
 ```
 const std::string export_dir = "/path/to/your/model/folder/";
 
