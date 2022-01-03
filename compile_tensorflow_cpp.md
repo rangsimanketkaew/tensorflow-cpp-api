@@ -2,17 +2,19 @@
 
 Building TensorFlow C++ API is very tricky and can be a pain as there is not much information you can find about it even on TensorFlow's official documentation. Following you will find a step-by-step instruction showing how to build TensorFlow C++ v2 on Linux. It works well for my Ubuntu 20.04 running on AMD Ryzen processors.
 
-In this page I will walk you through the steps to install TensorFlow C++ API version 2.7.
+In this page I will walk you through the steps to install **TensorFlow C++ API version 2.7**.
 
 ## Dependencies
 
 - Conda
-- Python 3.9.9
-- GCC 5 or newer
-- Bazel 3.7.2
-- Protobuf 3.9.2 (must be compatible with the version of TensorFlow-built protobuf or protoc)
+- Python
+- GCC 5 or higher
+- Bazel*
+- Protobuf*
 
-Check a list of supported Python version, compiler, and bazel at https://www.tensorflow.org/install/source#tested_build_configurations.
+*a supported version depends on the version of TensorFlow. For TensorFlow v2.7, Python 3.9.9, GCC 10.3.0, Bazel 3.7.2, and Protobuf 3.9.2 work for me.
+
+A list of supported Python, compiler, and Bazel can be found [here](https://www.tensorflow.org/install/source#tested_build_configurations).
 
 ---
 
@@ -28,6 +30,8 @@ conda update --all -y
 
 ### 2. Install bazel
 
+Check a supported version at `tensorflow/.bazelversion`.
+
 Add bazel repository:
 ```bash
 sudo apt install apt-transport-https curl gnupg
@@ -39,13 +43,11 @@ echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" |
 Install:
 ```bash
 sudo apt install bazel
-# or a specific version
+# or a specific version, e.g.,
 sudo apt install bazel-3.7.2
 ```
 
-You can also run the installer:
-
-Download from Bazel GitHub release page and run the installer in your home:
+You can also run the installer. Download from Bazel GitHub release page and run the installer in your home:
 ```bash
 https://github.com/bazelbuild/bazel/releases/download/3.7.2/bazel-3.7.2-installer-linux-x86_64.sh
 chmod +x bazel-3.7.2-installer-linux-x86_64.sh
@@ -88,13 +90,13 @@ bazel query ...
 
 Note:
 
-1. Building TF uses a lot of memory, I prefer a small number of CPUs (`--jobs`)
+1. Building TensorFlow uses a lot of memory, I prefer a small number of CPUs (`--jobs`)
 2. The whole process can take several hours
 3. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher
 4. Flags for optimization: `--copt="-O3"`
 5. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`
 6. Flags for Intel: `--copt=-mavx --copt=-mavx2`
-7. Rebuild with `--config=monolithic` if you want compile all TF C++ code into a single shared object
+7. Rebuild with `--config=monolithic` if you want compile all TensorFlow C++ code into a single shared object
 
 **optional**
 ```bash
@@ -104,7 +106,7 @@ bazel test --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
 
 ### 2. Install protobuf
 
-1. Check the version of protobuf that TF is built with
+1. Check the version of protobuf that is supported by TensorFlow
    ```bash
    bazel-bin/external/com_google_protobuf/protoc --version
    libprotoc 3.9.2
@@ -157,7 +159,7 @@ g++ -Wall -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 \
     -ltensorflow_cc -ltensorflow_framework
 ```
 
-**Example-2**: Call TF session
+**Example-2**: Call TensorFlow session
 
 Create `session.cpp`
 ```cpp
