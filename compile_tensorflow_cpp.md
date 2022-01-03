@@ -2,33 +2,34 @@
 
 Building TensorFlow C++ API is very tricky and can be a pain as there is not much information you can find about it even on TensorFlow's official documentation. Following you will find a step-by-step instruction showing how to build TensorFlow C++ v2 on Linux. It works well for my Ubuntu 20.04 running on AMD Ryzen processors.
 
-In this page I will walk you through the steps to install **TensorFlow C++ API version 2.7**.
+On this page, I will walk you through the steps to install **TensorFlow C++ API version 2.7**.
 
 ## Dependencies
 
 - Conda
-- Python
+- Python + NumPy
 - GCC 5 or higher
 - Bazel*
 - Protobuf*
 
 *a supported version depends on the version of TensorFlow. For TensorFlow v2.7, Python 3.9.9, GCC 10.3.0, Bazel 3.7.2, and Protobuf 3.9.2 work for me.
 
-A list of supported Python, compiler, and Bazel can be found [here](https://www.tensorflow.org/install/source#tested_build_configurations).
+A list of supported Python, compiler and Bazel can be found [here](https://www.tensorflow.org/install/source#tested_build_configurations).
 
 ---
 
 ## Install package dependencies
 
-### 1. Environment setup & install Python
+### 1. Environment setup
 ```bash
 conda create -n tfcc
 conda activate tfcc # or `source activate tfcc`
-conda install python==3.9.9
 conda update --all -y
+conda install python==3.9.9
+conda install numpy
 ```
 
-### 2. Install bazel
+### 2. Install Bazel
 
 Check a supported version at `tensorflow/.bazelversion`.
 
@@ -71,12 +72,19 @@ cd tensorflow
 git checkout r2.7
 ```
 
+Configure the build:
+```bash
+./configure
+# I leave all answers empty, just Enter
+```
+
 Let's compile using bazel `build` rule:
 ```bash
 export CC=gcc
 export CXX=g++
 bazel build --jobs=4 --local_ram_resources="HOST_RAM*.50" \
             --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
+            --config=noaws --config=nogcp --config=hdfs --config=nccl \
             //tensorflow:libtensorflow.so \
             //tensorflow:libtensorflow_cc.so \
             //tensorflow:libtensorflow_framework.so \
