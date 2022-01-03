@@ -7,7 +7,7 @@ In this page I will walk you through the steps to install TensorFlow C++ API ver
 ## Dependencies
 
 - Conda
-- Python 3.9.0
+- Python 3.9.9
 - GCC 5 or newer
 - Bazel 3.7.2
 - Protobuf 3.9.2 (must be compatible with the version of TensorFlow-built protobuf or protoc)
@@ -21,8 +21,8 @@ Check a list of supported Python version, compiler, and bazel at https://www.ten
 ### 1. Environment setup & install Python
 ```bash
 conda create -n tfcc
-conda activate tfcc
-conda install python==3.9
+conda activate tfcc # or `source activate tfcc`
+conda install python==3.9.9
 conda update --all -y
 ```
 
@@ -41,6 +41,15 @@ Install:
 sudo apt install bazel
 # or a specific version
 sudo apt install bazel-3.7.2
+```
+
+You can also run the installer:
+
+Download from Bazel GitHub release page and run the installer in your home:
+```bash
+https://github.com/bazelbuild/bazel/releases/download/3.7.2/bazel-3.7.2-installer-linux-x86_64.sh
+chmod +x bazel-3.7.2-installer-linux-x86_64.sh
+./bazel-3.7.2-installer-linux-x86_64.sh --user
 ```
 
 ### 3. Install Protobuf
