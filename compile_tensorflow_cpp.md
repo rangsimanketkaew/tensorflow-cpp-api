@@ -75,7 +75,8 @@ Let's compile using bazel `build` rule:
 ```bash
 export CC=gcc
 export CXX=g++
-bazel build --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
+bazel build --jobs=4 --local_ram_resources="HOST_MEM*.50" \
+            --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
             //tensorflow:libtensorflow.so \
             //tensorflow:libtensorflow_cc.so \
             //tensorflow:libtensorflow_framework.so \
@@ -83,7 +84,7 @@ bazel build --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
             //tensorflow/tools/pip_package:build_pip_package
 ```
 
-You can use the following command to check all available rules in each folder:
+You can use the following command to check all available rules in a specific top directory:
 ```bash
 bazel query ...
 ```
@@ -91,12 +92,13 @@ bazel query ...
 Note:
 
 1. Building TensorFlow uses a lot of memory, I prefer a small number of CPUs (`--jobs`)
-2. The whole process can take several hours
-3. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher
-4. Flags for optimization: `--copt="-O3"`
-5. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`
-6. Flags for Intel: `--copt=-mavx --copt=-mavx2`
-7. Rebuild with `--config=monolithic` if you want compile all TensorFlow C++ code into a single shared object
+2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., `4096` or % of total memory, e.g., 50% `"HOST_MEM*.50"`
+3. The whole process can take several hours
+4. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher
+5. Flags for optimization: `--copt="-O3"`
+6. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`
+7. Flags for Intel: `--copt=-mavx --copt=-mavx2`
+8. Rebuild with `--config=monolithic` if you want compile all TensorFlow C++ code into a single shared object
 
 **optional**
 ```bash
