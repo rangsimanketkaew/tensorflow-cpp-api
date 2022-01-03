@@ -1,8 +1,11 @@
 # Load model with TensorFlow C++ API
 
-## 1. Build neural network and save model
+The following you will learn how to save TensorFlow or Keras model using Python and then load it via TensorFlow C++ API `LoadSavedModel`.
 
-```
+## 1. Build neural network and save a model
+
+```python
+# keras_class.py
 from sklearn.datasets import make_classification
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
@@ -20,20 +23,26 @@ sgd = SGD(learning_rate=0.001, momentum=0.8)
 model.compile(optimizer=sgd, loss='binary_crossentropy')
 # fit the model
 model.fit(X, y, epochs=100, batch_size=32, verbose=1, validation_split=0.3)
-# save model to file
+# save model to folder
 model.save('model')
 ```
 
-This will create a folder `model` and save model as protobuf files: 
+Train a model:
+```bash
+python keras_class.py
 ```
+
+This will create a folder `model` and save model as protobuf files: 
+```bash
 ls model/
+# output
 assets  keras_metadata.pb  saved_model.pb  variables
 ```
 
-## 2. Load model with C++ API
+## 2. Load a model with C++ API
 
 Create a new file, e.g., `load_model.cpp`
-```
+```cpp
 #include <tensorflow/cc/saved_model/loader.h>
 #include <tensorflow/cc/saved_model/tag_constants.h>
 
@@ -41,6 +50,7 @@ using namespace tensorflow;
 
 int main() {
 
+// load the whole folder
 const std::string export_dir = "./model/";
 
 // Load
@@ -56,22 +66,23 @@ if (!status.ok()) {
 }
 ```
 
-Compile source code
-```
+Compile source code:
+```bash
 g++ -Wall -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 \
     load_model.cpp -o load_model.o \
     -I/usr/local/tensorflow/include/ -L/usr/local/tensorflow/lib -ltensorflow_cc -ltensorflow_framework 
 ```
 
-Add TensorFlow lib into lib env var
-```
+Add TensorFlow lib into lib env var:
+```bash
 export LD_LIBRARY_PATH=/usr/local/tensorflow/lib/:$LD_LIBRARY_PATH
 ```
 
-Run the executable
-```
+Run the executable:
+```bash
 ./load_model.o
 
+# output
 2021-12-30 22:14:10.621434: I tensorflow/cc/saved_model/reader.cc:38] Reading SavedModel from: ./model/
 2021-12-30 22:14:10.630099: I tensorflow/cc/saved_model/reader.cc:90] Reading meta graph with tags { serve }
 2021-12-30 22:14:10.630299: I tensorflow/cc/saved_model/reader.cc:132] Reading SavedModel debug info (if present) from: ./model/

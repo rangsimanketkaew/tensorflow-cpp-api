@@ -2,38 +2,51 @@
 
 Building TensorFlow C++ API is very tricky and can be a pain as there is not much information you can find about it even on TensorFlow's official documentation. Following you will find a step-by-step instruction showing how to build TensorFlow C++ v2 on Linux. It works well for my Ubuntu 20.04 running on AMD Ryzen processors.
 
+In this page I will walk you through the steps to install TensorFlow C++ API version 2.7.
+
 ## Dependencies
 
 - Conda environment
 - Python 3.9.0
-- TensorFlow 2.7
 - Bazel 3.7.2
 - Protobuf 3.9.2 (must be compatible with the version of TensorFlow-built protobuf or protoc)
 
-## Environment setup & install Python
+---
+
+## Install package dependencies
+
+### 1. Environment setup & install Python
 ```
 conda create -n tfcc
 conda activate tfcc
-conda install python
+conda install python==3.9
 conda update --all -y
 ```
 
-## Install bazel
+### 2. Install bazel
 ```
 sudo apt install bazel-3.7.2
 ```
 
-## Install TensorFlow CC
-```
+### 3. Install Protobuf
+
+I suggest installing protobuf after building TensorFlow so that we can check that which version of protobuf we have to use.
+
+---
+
+## Compile TensorFlow C++ and install libraries
+
+### 1. Compile TensorFlow C++ shared library (with optimization)
+
+Download or clone github repo to your system:
+```bash
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
 git checkout r2.7
 ```
 
----
-
-## 1. Compile TF shared library (with optimization)
-```
+Let's compile using bazel `build` rule:
+```bash
 export CC=gcc
 export CXX=g++
 bazel build --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
@@ -42,6 +55,11 @@ bazel build --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
             //tensorflow:libtensorflow_framework.so \
             //tensorflow:install_headers \
             //tensorflow/tools/pip_package:build_pip_package
+```
+
+You can use the following command to check all available rules in each folder:
+```bash
+bazel query ...
 ```
 
 Note:
@@ -60,24 +78,25 @@ bazel test --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
            //tensorflow/tools/lib_package:libtensorflow_test
 ```
 
-## 2. Install protobuf
+### 2. Install protobuf
 
 1. Check the version of protobuf that TF is built with
-   ```
+   ```bash
    bazel-bin/external/com_google_protobuf/protoc --version
    libprotoc 3.9.2
    ```
 2. Download protobuf source code from its GitHub release https://github.com/protocolbuffers/protobuf/tags
 3. Compile and link
-   ```
+   ```bash
    ./configure --prefix=/home/rangsiman/protobuf-3.9.2/
    make
    make check
    make install
    ```
 
-## 3. Copy required files into a single path for C++ linkage
-```
+### 3. Copy required files into a single path for C++ linkage
+
+```bash
 sudo mkdir /usr/local/tensorflow
 sudo cp -r bazel-bin/tensorflow/include/ /usr/local/tensorflow/
 sudo cp -r /home/rangsiman/protobuf-3.9.2/include/google/ /usr/local/tensorflow/include/
@@ -86,12 +105,12 @@ sudo cp -r bazel-bin/tensorflow/*.so* /usr/local/tensorflow/lib
 sudo cp -r /home/rangsiman/protobuf-3.9.2/lib/*.so* /usr/local/tensorflow/lib
 ```
 
-## 4. Compiling the op library and example code
+### 4. Compiling the op library and example code
 
 **Example-1**: Zero out
 
 Create `zero_out.cpp`
-```
+```cpp
 #include "tensorflow/core/framework/op.h"
 #include "tensorflow/core/framework/shape_inference.h"
 
@@ -107,7 +126,7 @@ REGISTER_OP("ZeroOut")
 ```
 
 Run the following
-```
+```bash
 g++ -Wall -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 \
     -shared zero_out.cpp -o zero_out.so \
     -I/usr/local/tensorflow/include/ -L/usr/local/tensorflow/lib \
@@ -117,7 +136,7 @@ g++ -Wall -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 \
 **Example-2**: Call TF session
 
 Create `session.cpp`
-```
+```cpp
 #include <tensorflow/core/platform/env.h>
 #include <tensorflow/core/public/session.h>
 
@@ -139,7 +158,7 @@ int main()
 ```
             
 Run the following
-```
+```bash
 g++ -Wall -fPIC -D_GLIBCXX_USE_CXX11_ABI=0 \
     session.cpp -o session \
     -I/usr/local/tensorflow/include/ -L/usr/local/tensorflow/lib \
@@ -150,12 +169,17 @@ To run the executable, you also need to add `/usr/local/tensorflow/lib/` into `L
 
 ---
 
-## Optional: Compile TF via pip (wheel) builder
-```
-## create a wheel package
-./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+## Optional: Compile TensorFlow via pip (wheel) builder
 
-## install TF using a created wheel
+Once you have built your TensorFlow, you can then make a wheel file and install the TensorFlow Python library:
+
+Create a wheel package:
+```bash
+./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+```
+
+Install TensorFlow library using a created wheel:
+```bash
 pip install /tmp/tensorflow_pkg/tensorflow-*.whl
 ```
 
