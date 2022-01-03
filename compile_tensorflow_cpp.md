@@ -75,7 +75,7 @@ Let's compile using bazel `build` rule:
 ```bash
 export CC=gcc
 export CXX=g++
-bazel build --jobs=4 --local_ram_resources="HOST_MEM*.50" \
+bazel build --jobs=4 --local_ram_resources="HOST_RAM*.50" \
             --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
             //tensorflow:libtensorflow.so \
             //tensorflow:libtensorflow_cc.so \
@@ -92,7 +92,7 @@ bazel query ...
 Note:
 
 1. Building TensorFlow uses a lot of memory, I prefer a small number of CPUs (`--jobs`)
-2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., `4096` or % of total memory, e.g., 50% `"HOST_MEM*.50"`
+2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., `4096` or % of total memory, e.g., 50% use `"HOST_RAM*.50"`
 3. The whole process can take several hours
 4. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher
 5. Flags for optimization: `--copt="-O3"`
