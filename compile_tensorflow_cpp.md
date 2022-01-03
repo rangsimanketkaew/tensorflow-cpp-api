@@ -6,17 +6,20 @@ In this page I will walk you through the steps to install TensorFlow C++ API ver
 
 ## Dependencies
 
-- Conda environment
+- Conda
 - Python 3.9.0
+- GCC 5 or newer
 - Bazel 3.7.2
 - Protobuf 3.9.2 (must be compatible with the version of TensorFlow-built protobuf or protoc)
+
+Check a list of supported Python version, compiler, and bazel at https://www.tensorflow.org/install/source#tested_build_configurations.
 
 ---
 
 ## Install package dependencies
 
 ### 1. Environment setup & install Python
-```
+```bash
 conda create -n tfcc
 conda activate tfcc
 conda install python==3.9
@@ -24,13 +27,25 @@ conda update --all -y
 ```
 
 ### 2. Install bazel
+
+Add bazel repository:
+```bash
+sudo apt install apt-transport-https curl gnupg
+curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
+sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
+echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
 ```
+
+Install:
+```bash
+sudo apt install bazel
+# or a specific version
 sudo apt install bazel-3.7.2
 ```
 
 ### 3. Install Protobuf
 
-I suggest installing protobuf after building TensorFlow so that we can check that which version of protobuf we have to use.
+I suggest installing protobuf after building TensorFlow so that we are able to check that which version of protobuf we should use.
 
 ---
 
@@ -73,7 +88,7 @@ Note:
 7. Rebuild with `--config=monolithic` if you want compile all TF C++ code into a single shared object
 
 **optional**
-```
+```bash
 bazel test --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
            //tensorflow/tools/lib_package:libtensorflow_test
 ```
