@@ -84,7 +84,7 @@ export CC=gcc
 export CXX=g++
 bazel build --jobs=4 --local_ram_resources="HOST_RAM*.50" \
             --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
-            --config=noaws --config=nogcp --config=hdfs --config=nccl \
+            --config=noaws --config=nogcp --config=nohdfs --config=nonccl \
             //tensorflow:libtensorflow.so \
             //tensorflow:libtensorflow_cc.so \
             //tensorflow:libtensorflow_framework.so \
