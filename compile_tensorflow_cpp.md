@@ -35,14 +35,15 @@ Check a supported version at `tensorflow/.bazelversion`.
 
 Add bazel repository:
 ```bash
-sudo apt install apt-transport-https curl gnupg
-curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
+sudo apt install curl gnupg
+curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
 echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
 ```
 
 Install:
 ```bash
+sudo apt update
+# Install the latest version
 sudo apt install bazel
 # or a specific version, e.g.,
 sudo apt install bazel-3.7.2
