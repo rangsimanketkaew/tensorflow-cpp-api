@@ -58,7 +58,7 @@ chmod +x bazel-3.7.2-installer-linux-x86_64.sh
 
 ### 3. Install Protobuf
 
-I suggest installing protobuf after building TensorFlow so that we are able to check that which version of protobuf we should use.
+I suggest installing protobuf after building TensorFlow (see below) so that we are able to check that which version of protobuf we should use.
 
 ---
 
@@ -100,14 +100,14 @@ bazel query ...
 
 Note:
 
-1. Building TensorFlow uses a lot of memory, I prefer a small number of CPUs (`--jobs`)
-2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., `4096` or % of total memory, e.g., 50% use `"HOST_RAM*.50"`
-3. The whole process can take several hours
-4. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher
-5. Flags for optimization: `--copt="-O3"`
-6. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`
-7. Flags for Intel: `--copt=-mavx --copt=-mavx2`
-8. Rebuild with `--config=monolithic` if you want compile all TensorFlow C++ code into a single shared object
+1. Building TensorFlow can consume a lot of memory. So I prefer a small number of CPUs (`--jobs`).
+2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., `4096` or % of total memory, e.g., 50% use `"HOST_RAM*.50"`.
+3. The whole process can take several hours.
+4. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher version.
+5. Flags for optimization: `--copt="-O3"`.
+6. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`.
+7. Flags for Intel: `--copt=-mavx --copt=-mavx2`.
+8. Rebuild with `--config=monolithic` if you want to compile all TensorFlow C++ code into a single shared object.
 
 **optional**
 ```bash
