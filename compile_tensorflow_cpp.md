@@ -123,8 +123,7 @@ bazel build --jobs=4 --local_ram_resources="HOST_RAM*.50" \
             //tensorflow:libtensorflow.so \
             //tensorflow:libtensorflow_cc.so \
             //tensorflow:libtensorflow_framework.so \
-            //tensorflow:install_headers \
-            //tensorflow/tools/pip_package:build_pip_package
+            //tensorflow:install_headers
 ```
 
 You can use the following command to check all available rules in a specific top directory:
@@ -143,10 +142,27 @@ Note:
 7. Flags for Intel: `--copt=-mavx --copt=-mavx2`.
 8. Rebuild with `--config=monolithic` if you want to compile all TensorFlow C++ code into a single shared object.
 
-**optional**
+**Optional 1:** Test
 ```bash
 bazel test --jobs=4 --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" -c opt \
            //tensorflow/tools/lib_package:libtensorflow_test
+```
+
+**Optional 2:**
+Additionally, you can also build TensorFlow wheel file (.whl) which can then be used to install TensorFlow by pip:
+
+```bash
+# Build process
+bazel build --config=opt -c opt //tensorflow/tools/pip_package:build_pip_package
+
+# Create a wheel file
+./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+
+# Install TensorFlow using the wheel file
+pip install /tmp/tensorflow_pkg/tensorflow-2.3.0-cp38-cp38-linux_x86_64.whl
+
+# Try importing TensorFlow and test it
+python -c "import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
 ```
 
 ### 2. Install protobuf
