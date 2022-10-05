@@ -51,7 +51,7 @@ sudo apt install bazel-3.7.2
 
 You can also run the installer. Download from Bazel GitHub release page and run the installer in your home:
 ```bash
-https://github.com/bazelbuild/bazel/releases/download/3.7.2/bazel-3.7.2-installer-linux-x86_64.sh
+wget https://github.com/bazelbuild/bazel/releases/download/3.7.2/bazel-3.7.2-installer-linux-x86_64.sh
 chmod +x bazel-3.7.2-installer-linux-x86_64.sh
 ./bazel-3.7.2-installer-linux-x86_64.sh --user
 ```
