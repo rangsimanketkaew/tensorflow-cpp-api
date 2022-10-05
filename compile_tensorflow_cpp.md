@@ -76,7 +76,41 @@ git checkout r2.7
 Configure the build:
 ```bash
 ./configure
-# I leave all answers empty, just Enter
+
+You have bazel 3.7.2 installed.
+Please specify the location of python. [Default is /home/rketka/miniconda3/envs/deepcv/bin/python3]:
+
+
+Found possible Python library paths:
+  /home/rketka/miniconda3/envs/deepcv/lib/python3.9/site-packages
+Please input the desired Python library path to use.  Default is [/home/rketka/miniconda3/envs/deepcv/lib/python3.9/site-packages]
+
+Do you wish to build TensorFlow with ROCm support? [y/N]: N
+No ROCm support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with CUDA support? [y/N]: N
+No CUDA support will be enabled for TensorFlow.
+
+Do you wish to download a fresh release of clang? (Experimental) [y/N]: N
+Clang will not be downloaded.
+
+Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -Wno-sign-compare]: n
+
+
+Would you like to interactively configure ./WORKSPACE for Android builds? [y/N]: n
+Not configuring the WORKSPACE for Android builds.
+
+Preconfigured Bazel build configs. You can use any of the below by adding "--config=<>" to your build command. See .bazelrc for more details.
+        --config=mkl            # Build with MKL support.
+        --config=mkl_aarch64    # Build with oneDNN and Compute Library for the Arm Architecture (ACL).
+        --config=monolithic     # Config for mostly static monolithic build.
+        --config=numa           # Build with NUMA support.
+        --config=dynamic_kernels        # (Experimental) Build kernels into separate shared objects.
+        --config=v1             # Build with TensorFlow 1 API instead of TF 2 API.
+Preconfigured Bazel build configs to DISABLE default on features:
+        --config=nogcp          # Disable GCP support.
+        --config=nonccl         # Disable NVIDIA NCCL support.
+Configuration finished
 ```
 
 Let's compile using bazel `build` rule:
@@ -100,9 +134,9 @@ bazel query ...
 
 Note:
 
-1. Building TensorFlow can consume a lot of memory. So I prefer a small number of CPUs (`--jobs`).
-2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., `4096` or % of total memory, e.g., 50% use `"HOST_RAM*.50"`.
-3. The whole process can take several hours.
+1. Building TensorFlow can consume a lot of memory. So I prefer a small number of CPUs (`--jobs`), e.g. 4 CPUs use `--jobs=4`.
+2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., 2048 use `--local_ram_resources=2048` or % of total memory, e.g., 50% use `"HOST_RAM*.50"`.
+3. The whole process can take up to 1 hour.
 4. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher version.
 5. Flags for optimization: `--copt="-O3"`.
 6. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`.
