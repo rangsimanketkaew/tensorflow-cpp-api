@@ -97,7 +97,7 @@ Clang will not be downloaded.
 Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -Wno-sign-compare]: n
 
 
-Would you like to interactively configure ./WORKSPACE for Android builds? [y/N]: n
+Would you like to interactively configure ./WORKSPACE for Android builds? [y/N]: N
 Not configuring the WORKSPACE for Android builds.
 
 Preconfigured Bazel build configs. You can use any of the below by adding "--config=<>" to your build command. See .bazelrc for more details.
@@ -173,7 +173,8 @@ python -c "import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1
    libprotoc 3.9.2
    ```
 2. Download protobuf source code from its GitHub release https://github.com/protocolbuffers/protobuf/tags
-3. Compile and link
+   - E.g. v3.9.2 https://github.com/protocolbuffers/protobuf/releases/tag/v3.9.2
+4. Compile and link
    ```bash
    ./configure --prefix=/home/rangsiman/protobuf-3.9.2/
    make
