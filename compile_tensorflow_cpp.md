@@ -1,21 +1,20 @@
-# Compile TensorFlow C++ from source code
+# Compile TensorFlow C++ from source code <!-- omit in toc -->
 
 Building TensorFlow C++ API is very tricky and can be a pain as there is not much information you can find about it even on TensorFlow's official documentation. Following you will find a step-by-step instruction showing how to build TensorFlow C++ v2 on Linux. It works well for my Ubuntu 20.04 running on AMD Ryzen processors.
 
 On this page, I will walk you through the steps to install **TensorFlow C++ API version 2.7**.
 
-- [Compile TensorFlow C++ from source code](#compile-tensorflow-c-from-source-code)
-  - [Dependencies](#dependencies)
-  - [Install package dependencies](#install-package-dependencies)
-    - [1. Environment setup](#1-environment-setup)
-    - [2. Install Bazel](#2-install-bazel)
-    - [3. Install Protobuf](#3-install-protobuf)
-  - [Compile TensorFlow C++ and install libraries](#compile-tensorflow-c-and-install-libraries)
-    - [1. Compile TensorFlow C++ shared library (with optimization)](#1-compile-tensorflow-c-shared-library-with-optimization)
-    - [2. Copy required files into a single path for C++ linkage](#2-copy-required-files-into-a-single-path-for-c-linkage)
-    - [3. Compiling the op library and example code](#3-compiling-the-op-library-and-example-code)
-  - [Optional: Compile TensorFlow via pip (wheel) builder](#optional-compile-tensorflow-via-pip-wheel-builder)
-  - [References](#references)
+- [Dependencies](#dependencies)
+- [Install package dependencies](#install-package-dependencies)
+  - [1. Environment setup](#1-environment-setup)
+  - [2. Install Bazel](#2-install-bazel)
+  - [3. Install Protobuf](#3-install-protobuf)
+- [Compile TensorFlow C++ and install libraries](#compile-tensorflow-c-and-install-libraries)
+  - [1. Compile TensorFlow C++ shared library (with optimization)](#1-compile-tensorflow-c-shared-library-with-optimization)
+  - [2. Copy required files into a single path for C++ linkage](#2-copy-required-files-into-a-single-path-for-c-linkage)
+  - [3. Compiling the op library and example code](#3-compiling-the-op-library-and-example-code)
+- [Optional: Compile TensorFlow via pip (wheel) builder](#optional-compile-tensorflow-via-pip-wheel-builder)
+- [References](#references)
 
 ## Dependencies
 
