@@ -4,6 +4,19 @@ Building TensorFlow C++ API is very tricky and can be a pain as there is not muc
 
 On this page, I will walk you through the steps to install **TensorFlow C++ API version 2.7**.
 
+- [Compile TensorFlow C++ from source code](#compile-tensorflow-c-from-source-code)
+  - [Dependencies](#dependencies)
+  - [Install package dependencies](#install-package-dependencies)
+    - [1. Environment setup](#1-environment-setup)
+    - [2. Install Bazel](#2-install-bazel)
+    - [3. Install Protobuf](#3-install-protobuf)
+  - [Compile TensorFlow C++ and install libraries](#compile-tensorflow-c-and-install-libraries)
+    - [1. Compile TensorFlow C++ shared library (with optimization)](#1-compile-tensorflow-c-shared-library-with-optimization)
+    - [2. Copy required files into a single path for C++ linkage](#2-copy-required-files-into-a-single-path-for-c-linkage)
+    - [3. Compiling the op library and example code](#3-compiling-the-op-library-and-example-code)
+  - [Optional: Compile TensorFlow via pip (wheel) builder](#optional-compile-tensorflow-via-pip-wheel-builder)
+  - [References](#references)
+
 ## Dependencies
 
 - Conda
@@ -58,7 +71,17 @@ chmod +x bazel-3.7.2-installer-linux-x86_64.sh
 
 ### 3. Install Protobuf
 
-I suggest installing protobuf after building TensorFlow (see below) so that we are able to check that which version of protobuf we should use.
+1. Check the version of protobuf that is supported by TensorFlow in the file `tensorflow/workspace2.bzl`,
+   e.g., TF 2.7.0 supports Protobuf 3.9.2
+2. Download protobuf source code from its GitHub release https://github.com/protocolbuffers/protobuf/tags
+   - E.g. v3.9.2 https://github.com/protocolbuffers/protobuf/releases/tag/v3.9.2
+3. Compile and link
+   ```bash
+   ./configure --prefix=/home/rangsiman/protobuf-3.9.2/ CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0"
+   make
+   make check
+   make install
+   ```
 
 ---
 
@@ -165,24 +188,7 @@ pip install /tmp/tensorflow_pkg/tensorflow-2.3.0-cp38-cp38-linux_x86_64.whl
 python -c "import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
 ```
 
-### 2. Install protobuf
-
-1. Check the version of protobuf that is supported by TensorFlow
-   ```bash
-   bazel-bin/external/com_google_protobuf/protoc --version
-   libprotoc 3.9.2
-   ```
-2. Download protobuf source code from its GitHub release https://github.com/protocolbuffers/protobuf/tags
-   - E.g. v3.9.2 https://github.com/protocolbuffers/protobuf/releases/tag/v3.9.2
-4. Compile and link
-   ```bash
-   ./configure --prefix=/home/rangsiman/protobuf-3.9.2/
-   make
-   make check
-   make install
-   ```
-
-### 3. Copy required files into a single path for C++ linkage
+### 2. Copy required files into a single path for C++ linkage
 
 ```bash
 sudo mkdir /usr/local/tensorflow
@@ -193,7 +199,7 @@ sudo cp -r bazel-bin/tensorflow/*.so* /usr/local/tensorflow/lib
 sudo cp -r /home/rangsiman/protobuf-3.9.2/lib/*.so* /usr/local/tensorflow/lib
 ```
 
-### 4. Compiling the op library and example code
+### 3. Compiling the op library and example code
 
 **Example-1**: Zero out
 
