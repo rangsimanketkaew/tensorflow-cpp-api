@@ -88,7 +88,14 @@ chmod +x bazel-3.7.2-installer-linux-x86_64.sh
 
 ### 1. Compile TensorFlow C++ shared library (with optimization)
 
-Download or clone github repo to your system:
+Download a tarball of TensorFlow (I strongly prefer v.2.7 to other versions), 
+e.g., from https://github.com/tensorflow/tensorflow/releases/tag/v2.7.4
+```bash
+wget https://github.com/tensorflow/tensorflow/archive/refs/tags/v2.7.4.tar.gz
+tar -xzvf v2.7.4.tar.gz
+cd tensorflow-2.7.4
+```
+or clone github repo to your system:
 ```bash
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
