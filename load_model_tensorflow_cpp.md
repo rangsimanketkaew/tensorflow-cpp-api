@@ -62,6 +62,20 @@ Status status = LoadSavedModel(session_options, run_options, export_dir, {kSaved
 if (!status.ok()) {
    std::cerr << "Failed: " << status;
 }
+
+auto sig_map = model_bundle.GetSignatures();
+auto model_def = sig_map.at("serving_default");
+
+for (auto const& p : sig_map) {
+        std::cout << "key: " << p.first.c_str() << std::endl;
+}
+for (auto const& p : model_def.inputs()) {
+        std::cout << "key: " << p.first.c_str() << " " << p.second.name().c_str() << std::endl;
+}
+for (auto const& p : model_def.outputs()) {
+        std::cout << "key: " << p.first.c_str() << " " << p.second.name().c_str() << std::endl;
+}
+
    return 0;
 }
 ```

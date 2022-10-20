@@ -91,7 +91,14 @@ chmod +x bazel-3.7.2-installer-linux-x86_64.sh
 
 ### 1. Compile TensorFlow C++ shared library (with optimization)
 
-Download or clone github repo to your system:
+Download a tarball of TensorFlow (I strongly prefer v.2.7 to other versions), 
+e.g., from https://github.com/tensorflow/tensorflow/releases/tag/v2.7.4
+```bash
+wget https://github.com/tensorflow/tensorflow/archive/refs/tags/v2.7.4.tar.gz
+tar -xzvf v2.7.4.tar.gz
+cd tensorflow-2.7.4
+```
+or clone github repo to your system:
 ```bash
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
@@ -165,11 +172,15 @@ Note:
 1. Building TensorFlow can consume a lot of memory. So I prefer a small number of CPUs (`--jobs`), e.g. 4 CPUs use `--jobs=4`.
 2. Limit RAM requested by bazel with `--local_ram_resources`. The value is either integer, .e.g., 2048 use `--local_ram_resources=2048` or % of total memory, e.g., 50% use `"HOST_RAM*.50"`.
 3. The whole process can take up to 1 hour.
-4. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher version.
-5. Flags for optimization: `--copt="-O3"`.
-6. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`.
-7. Flags for Intel: `--copt=-mavx --copt=-mavx2`.
-8. Rebuild with `--config=monolithic` if you want to compile all TensorFlow C++ code into a single shared object.
+4. If you don't want Bazel creates cache files in your local space, add [`--output_user_root`](https://docs.bazel.build/versions/main/user-manual.html#flag--output_user_root) to change the directory where output and base files will be created, e.g., 
+   ```bash
+   bazel --output_user_root=/scratch/bazel/ build ...
+   ```
+5. Add `-D_GLIBCXX_USE_CXX11_ABI=0` if you use GCC 5 or higher version.
+6. Flags for optimization: `--copt="-O3"`.
+7. Flasg for both AMD and Intel chips: `--copt=-mfma --copt=-msse4.1 --copt=-msse4.2 --copt=-mfpmath=both`.
+8. Flags for Intel: `--copt=-mavx --copt=-mavx2`.
+9. Rebuild with `--config=monolithic` if you want to compile all TensorFlow C++ code into a single shared object.
 
 **Optional 1:** Test
 ```bash
