@@ -1,8 +1,10 @@
 # Compile TensorFlow C++ from source code <!-- omit in toc -->
 
-Building TensorFlow C++ API is very tricky and can be a pain as there is not much information you can find about it even on TensorFlow's official documentation. Following you will find a step-by-step instruction showing how to build TensorFlow C++ v2 on Linux. It works well for my Ubuntu 20.04 running on AMD Ryzen processors.
+Building TensorFlow C++ API is very tricky and can be a pain as there is not much information you can find 
+about it even on TensorFlow's official documentation. Following you will find a step-by-step instruction 
+showing how to build TensorFlow C++ v2 on Linux. It works well for my Ubuntu 20.04 running on AMD Ryzen processors.
 
-On this page, I will walk you through the steps to install **TensorFlow C++ API version 2.7**.
+On this page, I will walk you through the steps to install **TensorFlow C++ API version 2.7** and **2.11**.
 
 - [Dependencies](#dependencies)
 - [Install package dependencies](#install-package-dependencies)
@@ -24,7 +26,8 @@ On this page, I will walk you through the steps to install **TensorFlow C++ API 
 - Bazel*
 - Protobuf*
 
-*a supported version depends on the version of TensorFlow. For TensorFlow v2.7, Python 3.9.9, GCC 10.3.0, Bazel 3.7.2, and Protobuf 3.9.2 work for me.
+*Supported version depends on the version of TensorFlow. For TensorFlow v2.7, I used Python 3.9.9, GCC 10.3.0, 
+Bazel 3.7.2, and Protobuf 3.9.2, whereas for TensorFlow v2.11 I use Bazel 5.3.0.
 
 A list of supported Python, compiler and Bazel can be found [here](https://www.tensorflow.org/install/source#tested_build_configurations).
 
@@ -135,7 +138,12 @@ Preconfigured Bazel build configs to DISABLE default on features:
 Configuration finished
 ```
 
-Let's compile using bazel `build` rule:
+You can use the following command to check all available rules in a specific top directory:
+```bash
+bazel query ...
+```
+
+Let's compile TensorFlow v2.7 using bazel `build` rule:
 ```bash
 export CC=gcc
 export CXX=g++
@@ -148,10 +156,9 @@ bazel build --jobs=4 --local_ram_resources="HOST_RAM*.50" \
             //tensorflow:install_headers
 ```
 
-You can use the following command to check all available rules in a specific top directory:
-```bash
-bazel query ...
-```
+For v2.11 you can also use the above bazal build command. From v2.9 on, you can compile TensorFlow with the new 
+ABI librar which is introduced in GCC 5 and newer version by setting `--cxxopt="-D_GLIBCXX_USE_CXX11_ABI=1"` 
+(see [the release log here](https://github.com/tensorflow/tensorflow/releases/tag/v2.9.0)).
 
 Note:
 
