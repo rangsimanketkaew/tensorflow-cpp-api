@@ -1,3 +1,7 @@
+/*
+Test TensorFlow sesssion
+*/
+
 #include <tensorflow/core/platform/env.h>
 #include <tensorflow/core/public/session.h>
 

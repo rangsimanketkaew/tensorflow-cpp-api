@@ -22,3 +22,4 @@ meaning that it lacks information and a tutorial about how to use TensorFlow API
 2. [TensorFlow Serving](./tensorflow_serving.md)
 3. [Tutorial: Introduction to TensorFlow Tensor](./tensorflow_tensor.md)
 4. [Tutorial: load saved model](./load_model_tensorflow_cpp.md)
+5. [Code: load and run model with multiple input layer](./run_model_multi_input.cpp)
